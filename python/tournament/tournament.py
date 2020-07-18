@@ -18,22 +18,23 @@ def tally(rows):
     # Matches played and points can be calculated, although have to sort by points.
     results = {}
     for row in rows:
-        team1, team2, result = row.split(";")
+        team1, team2, outcome = row.split(";")
         for team in [team1, team2]:
             if team not in results:
                 results[team] = Result(team)
-        if result == "win":
+        if outcome == "win":
             results[team1].W += 1
             results[team2].L += 1
-        if result == "loss":
+        if outcome == "loss":
             results[team1].L += 1
             results[team2].W += 1
-        if result == "draw":
+        if outcome == "draw":
             results[team1].D += 1
             results[team2].D += 1
     output = []
-    output.append("Team                           | MP |  W |  D |  L |  P")
+    ROW_FORMAT = "{:<30} | {:>2} | {:>2} | {:>2} | {:>2} | {:>2}"
+    output.append(ROW_FORMAT.format("Team", "MP", "W", "D", "L", "P"))
     for team, result in sorted(results.items(), key = lambda v: (-v[1].points, v[0]), reverse=False):
-        output.append("{:<30} | {:>2} | {:>2} | {:>2} | {:>2} | {:>2}".format(team, result.played, result.W, result.D, result.L, result.points))
+        output.append(ROW_FORMAT.format(team, result.played, result.W, result.D, result.L, result.points))
     print(output)
     return output
